@@ -267,9 +267,9 @@ if max_iter == 0:
   sys.exit()
 
 # Stores the test image names and sizes. Created by data/VOC0712/create_list.sh
-name_size_file = "data/VOC0712/test_name_size.txt"
+name_size_file = "" # "data/VOC0712/test_name_size.txt"
 # The resume model.
-pretrain_model = "{}_iter_{}.caffemodel".format(snapshot_prefix, max_iter)
+pretrain_model = "~/ssd_eval/vgg16_voc/verify_ptcaffe_caffe/VGG_VOC0712_SSD_300x300_epoch0232_0056.caffemodel" # "{}_iter_{}.caffemodel".format(snapshot_prefix, max_iter)
 # Stores LabelMapItem.
 label_map_file = "data/VOC0712/labelmap_voc.prototxt"
 

@@ -69,8 +69,10 @@ void DetectionOutputLayer<Dtype>::Forward_gpu(
       if (!share_location_) {
         cur_bbox_data += c * num_priors_ * 4;
       }
+      /* std::cout << "===caffe=== " << i << ":" << c << " " << num_priors_ << " before nms" << std::endl; */
       ApplyNMSFast(cur_bbox_data, cur_conf_data, num_priors_,
           confidence_threshold_, nms_threshold_, eta_, top_k_, &(indices[c]));
+      /* std::cout << "===caffe=== " << i << ":" << c << " " << indices[c].size() << " after nms" << std::endl; */
       num_det += indices[c].size();
     }
     if (keep_top_k_ > -1 && num_det > keep_top_k_) {

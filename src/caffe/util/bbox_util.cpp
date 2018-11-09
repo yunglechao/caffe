@@ -2025,6 +2025,8 @@ void ComputeAP(const vector<pair<float, int> >& tp, const int num_pos,
   for (int i = 0; i < num; ++i) {
     prec->push_back(static_cast<float>(tp_cumsum[i]) /
                     (tp_cumsum[i] + fp_cumsum[i]));
+    // LOG(ERROR) << "tp_cumsum: " << tp_cumsum[i];
+    // LOG(ERROR) << "fp_cumsum: " << fp_cumsum[i];
   }
 
   // Compute recall.
@@ -2037,13 +2039,19 @@ void ComputeAP(const vector<pair<float, int> >& tp, const int num_pos,
     // VOC2007 style for computing AP.
     vector<float> max_precs(11, 0.);
     int start_idx = num - 1;
+    float rec_point_array[] = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
+    std::vector<float> rec_point(rec_point_array, rec_point_array + sizeof(rec_point_array) / sizeof(float) );
     for (int j = 10; j >= 0; --j) {
       for (int i = start_idx; i >= 0 ; --i) {
-        if ((*rec)[i] < j / 10.) {
+        if ((*rec)[i] < rec_point[j]) {
+        // if ((*rec)[i] < j / 10.) {
           start_idx = i;
           if (j > 0) {
             max_precs[j-1] = max_precs[j];
           }
+          // if (num == 67) {
+            // LOG(ERROR) << "j: " << j << "i: " << i << "reci: " << (*rec)[i] << " j/10: " << j / 10.;
+          // }
           break;
         } else {
           if (max_precs[j] < (*prec)[i]) {
@@ -2054,6 +2062,9 @@ void ComputeAP(const vector<pair<float, int> >& tp, const int num_pos,
     }
     for (int j = 10; j >= 0; --j) {
       *ap += max_precs[j] / 11;
+      if (num == 67) {
+        LOG(ERROR) << "max_precs " << j << ": " << max_precs[j];
+      }
     }
   } else if (ap_version == "MaxIntegral") {
     // VOC2012 or ILSVRC style for computing AP.

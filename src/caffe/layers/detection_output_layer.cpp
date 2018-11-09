@@ -232,8 +232,10 @@ void DetectionOutputLayer<Dtype>::Forward_cpu(
         continue;
       }
       const vector<NormalizedBBox>& bboxes = decode_bboxes.find(label)->second;
+      // std::cout << "===caffe=== " << i << ":" << c << " " << bboxes.size() << " bboxes before nms" << std::endl;
       ApplyNMSFast(bboxes, scores, confidence_threshold_, nms_threshold_, eta_,
           top_k_, &(indices[c]));
+      // std::cout << "===caffe=== " << i << ":" << c << " " << indices[c].size() << " bboxes before nms" << std::endl;
       num_det += indices[c].size();
     }
     if (keep_top_k_ > -1 && num_det > keep_top_k_) {
